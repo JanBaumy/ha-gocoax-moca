@@ -178,6 +178,52 @@ async def test_options_flow_sets_scan_interval(hass):
     assert result["data"]["scan_interval"] == 60
 
 
+async def test_options_flow_can_add_peer_later(hass):
+    """Wer die Peer-IP bei der Einrichtung leer laesst, muss sie nachtragen
+    koennen -- ohne die Integration zu loeschen und neu anzulegen."""
+    entry = MockConfigEntry(
+        domain=DOMAIN,
+        unique_id=MAC_A,
+        data={**USER_INPUT, CONF_PEERS: {MAC_B: ""}},
+    )
+    entry.add_to_hass(hass)
+
+    with (
+        patch(PROBE, return_value=PROBE_B),
+        patch("custom_components.gocoax_moca.async_setup_entry", return_value=True),
+    ):
+        result = await hass.config_entries.options.async_init(entry.entry_id)
+        result = await hass.config_entries.options.async_configure(
+            result["flow_id"], {"scan_interval": 30, MAC_B: "192.0.2.11"}
+        )
+
+    assert result["type"] is FlowResultType.CREATE_ENTRY
+    assert entry.data[CONF_PEERS] == {MAC_B: "192.0.2.11"}
+
+
+async def test_options_flow_rejects_wrong_peer_ip(hass):
+    entry = MockConfigEntry(
+        domain=DOMAIN,
+        unique_id=MAC_A,
+        data={**USER_INPUT, CONF_PEERS: {MAC_B: ""}},
+    )
+    entry.add_to_hass(hass)
+
+    other = {"own_mac": "aabbccddeeff", "node_macs": {}, "chip_id": 0x16}
+    with (
+        patch(PROBE, return_value=other),
+        patch("custom_components.gocoax_moca.async_setup_entry", return_value=True),
+    ):
+        result = await hass.config_entries.options.async_init(entry.entry_id)
+        result = await hass.config_entries.options.async_configure(
+            result["flow_id"], {"scan_interval": 30, MAC_B: "192.0.2.99"}
+        )
+
+    assert result["type"] is FlowResultType.FORM
+    assert result["errors"] == {"base": "peer_mac_mismatch"}
+    assert entry.data[CONF_PEERS] == {MAC_B: ""}
+
+
 async def test_options_flow_rejects_too_short_interval(hass):
     entry = MockConfigEntry(domain=DOMAIN, unique_id=MAC_A, data=USER_INPUT)
     entry.add_to_hass(hass)

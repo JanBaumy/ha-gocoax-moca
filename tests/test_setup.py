@@ -95,10 +95,8 @@ async def test_dead_peer_makes_its_counters_unavailable(hass, fake_clients):
     fake_clients["192.0.2.11"].frame_fail = ClientError("tot")
     await _setup(hass, fake_clients)
 
-    # rx_bad des lebenden Adapters hat einen Wert ...
-    alive = hass.states.get("sensor.moca_adapter_94_cc_04_00_aa_01_ethernet_rx_fehlerhaft")
-    # ... der des toten nicht. Entity-IDs haengen an den Uebersetzungen, deshalb
-    # ueber die Registry statt ueber geratene IDs.
+    # Entity-IDs haengen an den Uebersetzungen -- deshalb ueber die Registry
+    # aufloesen statt sie zu raten.
     from homeassistant.helpers import entity_registry as er
 
     registry = er.async_get(hass)
@@ -108,7 +106,6 @@ async def test_dead_peer_makes_its_counters_unavailable(hass, fake_clients):
 
     alive_id = registry.async_get_entity_id("sensor", DOMAIN, f"{MAC_A_NORM}_rx_bad")
     assert hass.states.get(alive_id).state == "0"
-    assert alive is None or alive.state != "unavailable"
 
 
 async def test_unload(hass, fake_clients):

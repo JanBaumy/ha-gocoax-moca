@@ -5,18 +5,35 @@ on:
   pull_request:
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uvx ruff check .
+
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5
-      - name: Lint
-        run: uvx ruff check .
-      - name: Tests
+
+      # Der Testharness laeuft bewusst AUSSERHALB des Projektbaums:
+      # pyproject.toml verlangt Python >=3.14 (Anforderung von HA 2026.8),
+      # aber pytest-homeassistant-custom-component zieht HA 2026.2, das auf
+      # 3.14 nicht laeuft (mashumaro nutzt das entfernte typing.ByteString).
+      # Innerhalb des Projekts wuerde uv das --python 3.13 ueberstimmen.
+      #
+      # Damit gilt: die HA-abhaengigen Tests laufen gegen 2026.2, nicht gegen
+      # die Zielversion 2026.8. Fuer 2026.8 braucht es Python >= 3.14.2.
+      - name: Testumgebung ausserhalb des Projekts
         run: |
-          uv venv --python 3.13
-          uv pip install pytest-homeassistant-custom-component pytest-aiohttp
-          uv run --no-project pytest -q
+          uv venv --python 3.13 "$RUNNER_TEMP/hatest"
+          VIRTUAL_ENV="$RUNNER_TEMP/hatest" uv pip install \
+            pytest-homeassistant-custom-component pytest-aiohttp
+
+      - name: Tests
+        run: "$RUNNER_TEMP/hatest/bin/python -m pytest -q"
 
   hacs:
     runs-on: ubuntu-latest

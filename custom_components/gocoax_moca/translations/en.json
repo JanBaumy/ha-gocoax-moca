@@ -51,34 +51,81 @@
       "init": {
         "data": {
           "scan_interval": "Polling interval (seconds)"
-        }
+        },
+        "title": "Options",
+        "description": "Peer IPs are optional. Without one, the node is still shown, just without its Ethernet counters."
       }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect",
+      "invalid_auth": "Invalid authentication",
+      "peer_mac_mismatch": "That address belongs to a different adapter than expected"
     }
   },
   "entity": {
     "binary_sensor": {
-      "link": { "name": "Link" },
-      "node_online": { "name": "Online" }
+      "link": {
+        "name": "Link"
+      },
+      "node_online": {
+        "name": "Online"
+      }
     },
     "sensor": {
-      "node_count": { "name": "Active nodes" },
-      "net_version": { "name": "Network MoCA version" },
-      "nc_node": { "name": "Network coordinator" },
-      "beacon_channel": { "name": "Beacon channel" },
-      "first_channel": { "name": "First channel" },
-      "num_channels": { "name": "Number of channels" },
-      "lof": { "name": "Last operating frequency" },
-      "gcd": { "name": "GCD rate" },
-      "node_version": { "name": "MoCA version" },
-      "node_id": { "name": "Node ID" },
-      "phy_nper": { "name": "PHY rate to {peer}" },
-      "phy_vlper": { "name": "PHY rate VLPER to {peer}" },
-      "tx_good": { "name": "Ethernet Tx good" },
-      "tx_bad": { "name": "Ethernet Tx bad" },
-      "tx_dropped": { "name": "Ethernet Tx dropped" },
-      "rx_good": { "name": "Ethernet Rx good" },
-      "rx_bad": { "name": "Ethernet Rx bad" },
-      "rx_dropped": { "name": "Ethernet Rx dropped" }
+      "node_count": {
+        "name": "Active nodes"
+      },
+      "net_version": {
+        "name": "Network MoCA version"
+      },
+      "nc_node": {
+        "name": "Network coordinator"
+      },
+      "beacon_channel": {
+        "name": "Beacon channel"
+      },
+      "first_channel": {
+        "name": "First channel"
+      },
+      "num_channels": {
+        "name": "Number of channels"
+      },
+      "lof": {
+        "name": "Last operating frequency"
+      },
+      "gcd": {
+        "name": "GCD rate"
+      },
+      "node_version": {
+        "name": "MoCA version"
+      },
+      "node_id": {
+        "name": "Node ID"
+      },
+      "phy_nper": {
+        "name": "PHY rate to {peer}"
+      },
+      "phy_vlper": {
+        "name": "PHY rate VLPER to {peer}"
+      },
+      "tx_good": {
+        "name": "Ethernet Tx good"
+      },
+      "tx_bad": {
+        "name": "Ethernet Tx bad"
+      },
+      "tx_dropped": {
+        "name": "Ethernet Tx dropped"
+      },
+      "rx_good": {
+        "name": "Ethernet Rx good"
+      },
+      "rx_bad": {
+        "name": "Ethernet Rx bad"
+      },
+      "rx_dropped": {
+        "name": "Ethernet Rx dropped"
+      }
     }
   }
 }

@@ -21,7 +21,8 @@ Daten für alle Knoten des MoCA-Netzes. Im zweiten Schritt kannst du die IPs der
 Coordinator kann bei einem Ausfall auf sie ausweichen.
 
 MoCA überträgt nur MAC-Adressen, keine IPs. Deshalb kann Home Assistant die
-Adressen der anderen Adapter nicht selbst ermitteln.
+Adressen der anderen Adapter nicht selbst ermitteln. Nachtragen lassen sie sich
+jederzeit über *Konfigurieren* an der Integration.
 
 ## Entities
 
@@ -54,4 +55,20 @@ uv run pytest                                   # api/-Tests
 uv run python scripts/dump_registers.py <ip> --decode   # gegen echte Hardware
 ```
 
-Die HA-abhängigen Tests brauchen `pytest-homeassistant-custom-component`.
+Die HA-abhängigen Tests brauchen `pytest-homeassistant-custom-component`, und
+zwar in einer venv **außerhalb** des Projektbaums:
+
+```bash
+uv venv --python 3.13 /tmp/hatest
+VIRTUAL_ENV=/tmp/hatest uv pip install pytest-homeassistant-custom-component pytest-aiohttp
+/tmp/hatest/bin/python -m pytest -q
+```
+
+Grund: `pyproject.toml` verlangt Python ≥ 3.14 (Anforderung von HA 2026.8), aber
+der Testharness zieht HA 2026.2, das auf 3.14 nicht läuft. Innerhalb des Projekts
+würde `uv` die Anforderung durchsetzen und `--python 3.13` überstimmen.
+
+**Damit laufen die HA-abhängigen Tests gegen 2026.2, nicht gegen die Zielversion
+2026.8.** Die genutzten APIs sind zwischen beiden Versionen stabil, aber grün
+heißt hier nicht „gegen 2026.8 verifiziert". Die `api/`-Tests und der
+Hardware-Abgleich sind davon unberührt.

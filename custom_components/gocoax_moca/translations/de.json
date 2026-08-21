@@ -51,34 +51,81 @@
       "init": {
         "data": {
           "scan_interval": "Abfrageintervall (Sekunden)"
-        }
+        },
+        "title": "Optionen",
+        "description": "Die Peer-IPs sind optional. Ohne IP wird der Knoten trotzdem angezeigt, nur ohne seine Ethernet-Zähler."
       }
+    },
+    "error": {
+      "cannot_connect": "Verbindung fehlgeschlagen",
+      "invalid_auth": "Ungültige Zugangsdaten",
+      "peer_mac_mismatch": "Unter dieser Adresse antwortet ein anderer Adapter als erwartet"
     }
   },
   "entity": {
     "binary_sensor": {
-      "link": { "name": "Link" },
-      "node_online": { "name": "Online" }
+      "link": {
+        "name": "Link"
+      },
+      "node_online": {
+        "name": "Online"
+      }
     },
     "sensor": {
-      "node_count": { "name": "Aktive Knoten" },
-      "net_version": { "name": "MoCA-Version des Netzes" },
-      "nc_node": { "name": "Network Coordinator" },
-      "beacon_channel": { "name": "Beacon-Kanal" },
-      "first_channel": { "name": "Erster Kanal" },
-      "num_channels": { "name": "Anzahl Kanäle" },
-      "lof": { "name": "Letzte Betriebsfrequenz" },
-      "gcd": { "name": "GCD-Rate" },
-      "node_version": { "name": "MoCA-Version" },
-      "node_id": { "name": "Node-ID" },
-      "phy_nper": { "name": "PHY-Rate zu {peer}" },
-      "phy_vlper": { "name": "PHY-Rate VLPER zu {peer}" },
-      "tx_good": { "name": "Ethernet Tx gut" },
-      "tx_bad": { "name": "Ethernet Tx fehlerhaft" },
-      "tx_dropped": { "name": "Ethernet Tx verworfen" },
-      "rx_good": { "name": "Ethernet Rx gut" },
-      "rx_bad": { "name": "Ethernet Rx fehlerhaft" },
-      "rx_dropped": { "name": "Ethernet Rx verworfen" }
+      "node_count": {
+        "name": "Aktive Knoten"
+      },
+      "net_version": {
+        "name": "MoCA-Version des Netzes"
+      },
+      "nc_node": {
+        "name": "Network Coordinator"
+      },
+      "beacon_channel": {
+        "name": "Beacon-Kanal"
+      },
+      "first_channel": {
+        "name": "Erster Kanal"
+      },
+      "num_channels": {
+        "name": "Anzahl Kanäle"
+      },
+      "lof": {
+        "name": "Letzte Betriebsfrequenz"
+      },
+      "gcd": {
+        "name": "GCD-Rate"
+      },
+      "node_version": {
+        "name": "MoCA-Version"
+      },
+      "node_id": {
+        "name": "Node-ID"
+      },
+      "phy_nper": {
+        "name": "PHY-Rate zu {peer}"
+      },
+      "phy_vlper": {
+        "name": "PHY-Rate VLPER zu {peer}"
+      },
+      "tx_good": {
+        "name": "Ethernet Tx gut"
+      },
+      "tx_bad": {
+        "name": "Ethernet Tx fehlerhaft"
+      },
+      "tx_dropped": {
+        "name": "Ethernet Tx verworfen"
+      },
+      "rx_good": {
+        "name": "Ethernet Rx gut"
+      },
+      "rx_bad": {
+        "name": "Ethernet Rx fehlerhaft"
+      },
+      "rx_dropped": {
+        "name": "Ethernet Rx verworfen"
+      }
     }
   }
 }

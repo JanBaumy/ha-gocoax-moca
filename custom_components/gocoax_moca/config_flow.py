@@ -148,7 +148,7 @@ class GoCoaxConfigFlow(ConfigFlow, domain=DOMAIN):
         selbst herausfinden. Ohne IP wird der Knoten trotzdem angelegt, ihm
         fehlen dann nur die Ethernet-Zaehler.
         """
-        own_mac = self._data and normalize_mac(self.unique_id or "")
+        own_mac = normalize_mac(self.unique_id or "")
         peers = {
             mac: node for node, mac in self._node_macs.items() if mac != own_mac
         }
@@ -284,25 +284,78 @@ class GoCoaxConfigFlow(ConfigFlow, domain=DOMAIN):
 
 
 class GoCoaxOptionsFlow(OptionsFlow):
-    """Poll-Intervall."""
+    """Poll-Intervall und die IPs der weiteren Adapter.
+
+    Die Peer-IPs gehoeren hierher und nicht nur in den Einrichtungsdialog: wer
+    sie dort leer laesst -- was ausdruecklich erlaubt ist -- soll sie spaeter
+    nachtragen koennen, ohne die Integration neu anzulegen.
+    """
 
     async def async_step_init(
         self, user_input: dict[str, Any] | None = None
     ) -> ConfigFlowResult:
-        if user_input is not None:
-            return self.async_create_entry(data=user_input)
+        peers = self._known_peers()
+        errors: dict[str, str] = {}
 
-        current = self.config_entry.options.get(
+        if user_input is not None:
+            configured: dict[str, str] = {}
+            for mac in peers:
+                host = (user_input.get(mac) or "").strip()
+                if not host:
+                    continue
+                try:
+                    info = await _probe(
+                        self.hass,
+                        host,
+                        self.config_entry.data[CONF_USERNAME],
+                        self.config_entry.data[CONF_PASSWORD],
+                    )
+                except GoCoaxAuthError:
+                    errors["base"] = "invalid_auth"
+                    break
+                except (GoCoaxError, ClientError, TimeoutError):
+                    errors["base"] = "cannot_connect"
+                    break
+                if info["own_mac"] != mac:
+                    errors["base"] = "peer_mac_mismatch"
+                    break
+                configured[mac] = host
+            else:
+                # Peers liegen im Entry-Data (der Setup-Pfad schreibt sie dort),
+                # das Intervall in den Optionen.
+                self.hass.config_entries.async_update_entry(
+                    self.config_entry,
+                    data={**self.config_entry.data, CONF_PEERS: configured},
+                )
+                return self.async_create_entry(
+                    data={CONF_SCAN_INTERVAL: user_input[CONF_SCAN_INTERVAL]}
+                )
+
+        current_interval = self.config_entry.options.get(
             CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL
         )
+        known_hosts = self.config_entry.data.get(CONF_PEERS, {})
+        schema = {
+            vol.Required(CONF_SCAN_INTERVAL, default=current_interval): vol.All(
+                vol.Coerce(int),
+                vol.Range(min=MIN_SCAN_INTERVAL, max=MAX_SCAN_INTERVAL),
+            )
+        }
+        for mac in peers:
+            schema[vol.Optional(mac, default=known_hosts.get(mac, ""))] = str
+
         return self.async_show_form(
-            step_id="init",
-            data_schema=vol.Schema(
-                {
-                    vol.Required(CONF_SCAN_INTERVAL, default=current): vol.All(
-                        vol.Coerce(int),
-                        vol.Range(min=MIN_SCAN_INTERVAL, max=MAX_SCAN_INTERVAL),
-                    )
-                }
-            ),
+            step_id="init", data_schema=vol.Schema(schema), errors=errors
         )
+
+    def _known_peers(self) -> list[str]:
+        """MACs aller Knoten ausser dem Host des Entries.
+
+        Quelle ist der letzte Poll; ist die Integration nicht geladen, bleiben
+        die bereits konfigurierten Peers uebrig.
+        """
+        own = self.config_entry.unique_id
+        coordinator = getattr(self.config_entry, "runtime_data", None)
+        if coordinator is not None and coordinator.data is not None:
+            return sorted(mac for mac in coordinator.data.nodes if mac != own)
+        return sorted(self.config_entry.data.get(CONF_PEERS, {}))
