@@ -95,9 +95,6 @@ class FakeClient:
         return self._frame
 
 
-MAC_A = [0x94CC0400, 0xAA010000]  # Knoten 0
-MAC_B = [0x94CC0400, 0xAA020000]  # Knoten 1
-
 
 @pytest.fixture
 def fake_clients():

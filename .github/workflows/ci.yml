@@ -30,3 +30,7 @@ jobs:
       - uses: hacs/action@main
         with:
           category: integration
+          # Brand-Assets liegen im zentralen home-assistant/brands-Repo und
+          # sind fuer eine Custom Integration ausserhalb des HACS-Defaultstores
+          # nicht erforderlich.
+          ignore: brands
