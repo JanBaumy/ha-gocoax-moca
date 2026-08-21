@@ -1,0 +1,84 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "GoCoax MoCA adapter",
+        "description": "Enter one adapter. The other nodes of the MoCA network are discovered automatically.",
+        "data": {
+          "host": "Host or IP address",
+          "username": "Username",
+          "password": "Password"
+        }
+      },
+      "peers": {
+        "title": "Additional adapters",
+        "description": "MoCA only carries MAC addresses, so Home Assistant cannot discover the IP of the other adapters. Enter them to also get their Ethernet counters. Leave blank to add the node without those counters.\n\nDiscovered: {peers}",
+        "data": {}
+      },
+      "reauth_confirm": {
+        "title": "Re-authenticate",
+        "data": {
+          "username": "Username",
+          "password": "Password"
+        }
+      },
+      "reconfigure": {
+        "title": "Change connection",
+        "data": {
+          "host": "Host or IP address",
+          "username": "Username",
+          "password": "Password"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect",
+      "invalid_auth": "Invalid authentication",
+      "csrf_failed": "The adapter rejected the CSRF token",
+      "peer_mac_mismatch": "That address belongs to a different adapter than expected",
+      "wrong_device": "That address belongs to a different adapter than this entry",
+      "unknown": "Unexpected error"
+    },
+    "abort": {
+      "already_configured": "This adapter is already configured",
+      "already_configured_network": "This MoCA network is already configured via another adapter",
+      "reauth_successful": "Re-authentication was successful",
+      "reconfigure_successful": "Re-configuration was successful"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "data": {
+          "scan_interval": "Polling interval (seconds)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "link": { "name": "Link" },
+      "node_online": { "name": "Online" }
+    },
+    "sensor": {
+      "node_count": { "name": "Active nodes" },
+      "net_version": { "name": "Network MoCA version" },
+      "nc_node": { "name": "Network coordinator" },
+      "beacon_channel": { "name": "Beacon channel" },
+      "first_channel": { "name": "First channel" },
+      "num_channels": { "name": "Number of channels" },
+      "lof": { "name": "Last operating frequency" },
+      "gcd": { "name": "GCD rate" },
+      "node_version": { "name": "MoCA version" },
+      "node_id": { "name": "Node ID" },
+      "phy_nper": { "name": "PHY rate to {peer}" },
+      "phy_vlper": { "name": "PHY rate VLPER to {peer}" },
+      "tx_good": { "name": "Ethernet Tx good" },
+      "tx_bad": { "name": "Ethernet Tx bad" },
+      "tx_dropped": { "name": "Ethernet Tx dropped" },
+      "rx_good": { "name": "Ethernet Rx good" },
+      "rx_bad": { "name": "Ethernet Rx bad" },
+      "rx_dropped": { "name": "Ethernet Rx dropped" }
+    }
+  }
+}

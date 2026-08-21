@@ -1,0 +1,12 @@
+{
+  "domain": "gocoax_moca",
+  "name": "GoCoax MoCA",
+  "codeowners": ["@JanBaumy"],
+  "config_flow": true,
+  "documentation": "https://github.com/JanBaumy/ha-gocoax-moca",
+  "integration_type": "hub",
+  "iot_class": "local_polling",
+  "issue_tracker": "https://github.com/JanBaumy/ha-gocoax-moca/issues",
+  "requirements": [],
+  "version": "0.1.0"
+}

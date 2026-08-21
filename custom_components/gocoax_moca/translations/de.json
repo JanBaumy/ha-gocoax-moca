@@ -1,0 +1,84 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "GoCoax MoCA-Adapter",
+        "description": "Einen Adapter eintragen. Die übrigen Knoten des MoCA-Netzes werden automatisch erkannt.",
+        "data": {
+          "host": "Host oder IP-Adresse",
+          "username": "Benutzername",
+          "password": "Passwort"
+        }
+      },
+      "peers": {
+        "title": "Weitere Adapter",
+        "description": "MoCA überträgt nur MAC-Adressen — Home Assistant kann die IP der anderen Adapter deshalb nicht selbst ermitteln. Trägst du sie ein, kommen zusätzlich deren Ethernet-Zähler dazu. Leer lassen legt den Knoten trotzdem an, nur ohne diese Zähler.\n\nGefunden: {peers}",
+        "data": {}
+      },
+      "reauth_confirm": {
+        "title": "Erneut anmelden",
+        "data": {
+          "username": "Benutzername",
+          "password": "Passwort"
+        }
+      },
+      "reconfigure": {
+        "title": "Verbindung ändern",
+        "data": {
+          "host": "Host oder IP-Adresse",
+          "username": "Benutzername",
+          "password": "Passwort"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Verbindung fehlgeschlagen",
+      "invalid_auth": "Ungültige Zugangsdaten",
+      "csrf_failed": "Der Adapter hat das CSRF-Token abgelehnt",
+      "peer_mac_mismatch": "Unter dieser Adresse antwortet ein anderer Adapter als erwartet",
+      "wrong_device": "Unter dieser Adresse antwortet ein anderer Adapter als der dieses Eintrags",
+      "unknown": "Unerwarteter Fehler"
+    },
+    "abort": {
+      "already_configured": "Dieser Adapter ist bereits eingerichtet",
+      "already_configured_network": "Dieses MoCA-Netz ist bereits über einen anderen Adapter eingerichtet",
+      "reauth_successful": "Erneute Anmeldung erfolgreich",
+      "reconfigure_successful": "Neukonfiguration erfolgreich"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "data": {
+          "scan_interval": "Abfrageintervall (Sekunden)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "link": { "name": "Link" },
+      "node_online": { "name": "Online" }
+    },
+    "sensor": {
+      "node_count": { "name": "Aktive Knoten" },
+      "net_version": { "name": "MoCA-Version des Netzes" },
+      "nc_node": { "name": "Network Coordinator" },
+      "beacon_channel": { "name": "Beacon-Kanal" },
+      "first_channel": { "name": "Erster Kanal" },
+      "num_channels": { "name": "Anzahl Kanäle" },
+      "lof": { "name": "Letzte Betriebsfrequenz" },
+      "gcd": { "name": "GCD-Rate" },
+      "node_version": { "name": "MoCA-Version" },
+      "node_id": { "name": "Node-ID" },
+      "phy_nper": { "name": "PHY-Rate zu {peer}" },
+      "phy_vlper": { "name": "PHY-Rate VLPER zu {peer}" },
+      "tx_good": { "name": "Ethernet Tx gut" },
+      "tx_bad": { "name": "Ethernet Tx fehlerhaft" },
+      "tx_dropped": { "name": "Ethernet Tx verworfen" },
+      "rx_good": { "name": "Ethernet Rx gut" },
+      "rx_bad": { "name": "Ethernet Rx fehlerhaft" },
+      "rx_dropped": { "name": "Ethernet Rx verworfen" }
+    }
+  }
+}
