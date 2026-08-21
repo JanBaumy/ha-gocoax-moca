@@ -1,7 +1,4 @@
-"""End-to-End-Setup: Entry laden, Entities pruefen, Knoten kommen und gehen.
-
-Laeuft gegen HA 2026.2 (Testharness), nicht gegen 2026.8.
-"""
+"""End-to-End-Setup: Entry laden, Entities pruefen, Knoten kommen und gehen."""
 
 from __future__ import annotations
 

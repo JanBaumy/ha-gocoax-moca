@@ -1,8 +1,4 @@
-"""Tests des Config Flows.
-
-Laeuft gegen HA 2026.2 (Testharness), nicht gegen die Zielversion 2026.8 --
-siehe Hinweis in test_coordinator.py.
-"""
+"""Tests des Config Flows."""
 
 from __future__ import annotations
 

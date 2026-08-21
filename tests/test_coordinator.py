@@ -1,10 +1,4 @@
-"""Tests des Coordinators: Failover, Fehlerklassifikation, Verfuegbarkeit.
-
-Laeuft gegen den HA-Testharness. Achtung: der Harness zieht HA 2026.2, nicht
-die Zielversion 2026.8 -- die benoetigt Python >= 3.14.2, das hier nicht
-verfuegbar ist. Die genutzten APIs sind zwischen beiden Versionen stabil,
-aber gruen heisst hier nicht "gegen 2026.8 verifiziert".
-"""
+"""Tests des Coordinators: Failover, Fehlerklassifikation, Verfuegbarkeit."""
 
 from __future__ import annotations
 
